@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>Language</title>
+    <link rel="icon" type="image/x-icon" href="./leanghak-coder.png">
+    <!-- jQuery 3.6.0-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Latest Bootstrap 5.2.0 beta -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+
+    <!-- Typed.js for typing text animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.0/typed.min.js"
+        integrity="sha512-zKaK6G2LZC5YZTX0vKmD7xOwd1zrEEMal4zlTf5Ved/A1RrnW+qt8pWDfo7oz+xeChECS/P9dv6EDwwPwelFfQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .loading-container {
+            height: 100vh;
+        }
+
+        .loading {
+            padding: 15px;
+            margin: auto;
+
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .typed-cursor {
+            animation: blink 1s steps(2, start) infinite;
+        }
+
+        @keyframes blink {
+            to {
+                visibility: hidden;
+            }
+        }
+
+        @-webkit-keyframes blink {
+            to {
+                visibility: hidden;
+            }
+        }
+
+        code {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 1.5em;
+            overflow-x: scroll;
+            white-space: pre;
+        }
+
+        main {
+            margin-bottom: 100px;
+        }
+
+        #themes-dropdown-container {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            width: 100%;
+            height: fit-content;
+            z-index: 1;
+        }
+
+        span.dropdown-item {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .code-highlight.cht-monokai {
+            background-color: #272822;
+            color: #F8F8F2;
+        }
+
+        .code-highlight.cht-monokai .kw1,
+        .code-highlight.cht-monokai .sym,
+        .code-highlight.cht-monokai .p {
+            color: #F92672;
+        }
+
+        .code-highlight.cht-monokai .nm2,
+        .code-highlight.cht-monokai .tp {
+            color: #66D9EF;
+        }
+
+        .code-highlight.cht-monokai .tp {
+            font-style: italic;
+        }
+
+        .code-highlight.cht-monokai .com,
+        .code-highlight.cht-monokai .spch,
+        .code-highlight.cht-monokai .semi,
+        .code-highlight.cht-monokai .q {
+            color: #75715E;
+        }
+
+        .code-highlight.cht-monokai .str {
+            color: #E6DB74
+        }
+
+        .code-highlight.cht-monokai .nm {
+            color: #A6E22E;
+        }
+
+        .code-highlight.cht-monokai .num,
+        .code-highlight.cht-monokai .scp {
+            color: #AE81FF;
+        }
+
+        .code-highlight.cht-monokai .arg {
+            color: #FD971F;
+        }
+
+        .code-highlight.cht-dracula {
+            background-color: #282a36;
+            color: #f8f8f2;
+        }
+
+        .code-highlight.cht-dracula .kw1,
+        .code-highlight.cht-dracula .tp,
+        .code-highlight.cht-dracula .spch,
+        .code-highlight.cht-dracula .scp {
+            color: #ff79c6;
+        }
+
+        .code-highlight.cht-dracula .com {
+            color: #6272a4;
+        }
+
+        .code-highlight.cht-dracula .str,
+        .code-highlight.cht-dracula .q {
+            color: #f1fa8c;
+        }
+
+        .code-highlight.cht-dracula .nm {
+            color: #50fa7b;
+        }
+
+        .code-highlight.cht-dracula .nm2 {
+            color: #8be9fd;
+            font-style: italic;
+        }
+
+        .code-highlight.cht-dracula .num {
+            color: #bd93f9;
+        }
+
+        header {
+            height: 100vh;
+        }
+
+        footer#g__b-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: fit-content;
+            height: 12%;
+            margin: auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px 10px 0 0;
+            font-size: 2.5vh;
+            color: rgba(0, 0, 0, 0.6)
+        }
+
+        footer>p {
+            padding: 0 10vw 0 10vw;
+            white-space: nowrap;
+            max-width: fit-content;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="container-fluid loading-container bg-dark">
+        <div class="d-flex align-items-center loading">
+            <span class="lead text-white"><strong>Loading...</strong></span>
+            <div class="spinner-border ms-auto text-white" role="status" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    <header class="container-fluid d-flex bg-dark">
+        <h1 class="display-1 w-100 align-self-center text-center text-white"><span id="typed-header"></span></h1>
+    </header>
+
+    <div id="themes-dropdown-container">
+        <div id="themes-dropdown" class="btn-group dropend">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Theme
+            </button>
+            <ul id="themes-dropdown-list" class="dropdown-menu"></ul>
+        </div>
+    </div>
+
+    <main>
+        <section id="trivia" class="container shadow my-2 py-2 border rounded px-3">
+            <blockquote class="blockquote">
+                <h2>Trivia about <i>"Hello, world!"</i></h2>
+                <p>A "Hello, world!" program is generally a computer program that outputs or displays the message
+                    "Hello, world!". This program is very simple to write in many programming languages, and is often
+                    used to illustrate a language's basic syntax. "Hello, world!" programs are often the first a student
+                    learns to write in a given language, and they can also be used as a sanity test to ensure computer
+                    software intended to compile or run source code is correctly installed, and that its operator
+                    understands how to use it.</p>
+            </blockquote>
+            <figcaption class="blockquote-footer text-end"><cite title="Wikipedia">Wikipedia</cite></figcaption>
+        </section>
+        <section id="hw-snippets" class="container my-2 py-2 px-3">
+            <div id="snippets-accordion" class="accordion">
+
+            </div>
+        </section>
+    </main>
+    <footer id="g__b-footer">
+        <p>GUMBALL &copy; 2022<br>All rights reserved<br>v0.0.1 <span class="badge bg-warning">Beta</span></p>
+    </footer>
+    <script>
+        let theme = 'monokai'
+
+        const themes = [
+            'dracula', 'monokai',
+        ]
+
+        let $accGlobal = null
+        let accItems = null
+
+        function parsecode(code) {
+            let html = ''
+            let iskw = false
+            let currkw = ''
+            for (let i = 0; i < code.length; i++) {
+                const curr = code.charAt(i)
+                if (iskw) {
+                    if (curr == '%') {
+                        iskw = false
+                        switch (currkw) {
+                            case '/':
+                                html = html.concat(`</span>`)
+                                break
+                            default:
+                                html = html.concat(`<span class="${currkw}">`)
+                                break
+                        }
+                        currkw = ''
+                        continue
+                    }
+                    currkw = currkw.concat(curr)
+                    continue
+                }
+                if (curr == '%') {
+                    if (i != 0 && code.charAt(i - 1) == '\\') {
+                        html = html.concat(curr)
+                        continue
+                    } else {
+                        iskw = true
+                        continue
+                    }
+                }
+                html = html.concat(curr)
+            }
+            return html
+        }
+
+        const accordionItems = [
+            {
+                title: 'C',
+                code: `%spch%#%/%%kw1%include%/% %q%&lt;%/%%str%stdio.h%/%%q%&gt;%/%
+
+%tp%int%/% %nm%main%/%%p%() {%/%
+    %nm%printf%/%%p%(%/%%q%"%/%%str%Hello, world!%scp%\\n%/%%/%%q%"%/%%p%)%/%%semi%;%/%
+    %kw1%return%/% %num%0%/%%semi%;%/%
+%sym%}%/%`,
+                identifier: 'c',
+                append: `<hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1089">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/cn9V1Y85Mo4e">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/C_(programming_language)">Wikipedia</a> |
+            <a href="https://www.open-std.org/jtc1/sc22/wg14/">C17&nbsp;Standard</a>
+        </p>`,
+            },
+            {
+                title: 'C++',
+                code: `%spch%#%/%%kw1%include%/% %q%&lt;%/%%str%iostream%/%%q%&gt;%/%
+
+%tp%int%/% %nm%main%/%%p%() {%/%
+    std%spch%::%/%%nm%cout%/% %sym%&lt;&lt;%/% %q%"%/%%str%Hello, world!%/%%scp%\\n%/%%q%"%/%%semi%;%/%
+%sym%}%/%`,
+                identifier: 'cpp',
+                append: `<hr><p>Links: 
+            <a href="https://www.sololearn.com/learning/1051">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/c7xzU7Gtsq6i">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/C++">Wikipedia</a> |
+            <a href="https://isocpp.org/">C++ ISO Standard</a>
+        </p>`
+            },
+            {
+                title: 'C#',
+                code: `%kw1%using%/% %nm2%System%/%%semi%;%/%
+
+%kw1%namespace%/% %nm2%HelloWorld%/%
+%p%{%/%
+    %kw1%class%/% %nm2%Program%/%
+    %p%{%/%
+        %kw1%static%/% %tp%void%/% %nm%Main%/%%p%()%/%
+        %p%{%/%
+            Console%spch%.%/%%nm%WriteLine%/%%p%(%/%%q%"%/%%str%Hello, world!%/%%q%"%/%%p%)%/%%semi%;%/%
+        %p%}%/%
+    %p%}%/%
+%p%}%/%
+`,
+                identifier: 'cs',
+                append: `<br><p>In C# 9.0 and later could be simply written as:</p>
+        <code class="code-highlight cht-${theme}">System.Console.%nm%WriteLine%/%%p%(%/%%q%"%/%%str%Hello, world!%/%%q%"%/%%p%)%/%%semi%;%/%</code>
+        <hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1080">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/cpzKyUVFCRaq">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/C_Sharp_(programming_language)">Wikipedia</a> |
+            <a href="https://microsoft.com/">Microsoft</a> |
+            <a href="https://docs.microsoft.com/en-us/dotnet/csharp/">Official Documentation</a>
+        </p>`
+            },
+            {
+                title: 'Go',
+                code: `%kw1%package%/% main
+
+%kw1%import%/% %q%"%/%%str%fmt%/%%q%"%/%
+
+%kw1%func%/% %nm%main%/%%p%() {%/%
+    fmt%spch%.%/%%nm2%Println%/%%p%(%/%%q%"%/%%str%Hello, world!%/%%q%"%/%%p%)%/%
+%p%}%/%`,
+                identifier: 'go',
+                append: `<hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1164">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/cYJNv6jFFOBp">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/Go_(programming_language)">Wikipedia</a> |
+            <a href="https://go.dev/">Official Website</a>
+        </p>`
+            },
+            {
+                title: 'Java',
+                code: `%kw1%public class%/% %nm2%HelloWorld%/% %p%{%/%
+    %kw1%public static%/% %tp%void%/% %nm%main%/%%p%(%/%%tp%String%/%%p%[]%/% %arg%args%/%%p%)%/% %p%{%/%
+        System%spch%.%/%out%spch%.%/%%nm%println%/%%p%(%/%%q%"%/%%str%Hello, world!%/%%q%"%/%%p%)%/%%semi%;%/%
+    %p%}%/%
+%p%}%/%`,
+                identifier: 'java',
+                append: `<hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1068">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/czaZxVfrXkKW">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/Java_(programming_language)">Wikipedia</a> |
+            <a href="https://www.java.com/">Official Website</a>
+        </p>`
+            },
+            {
+                title: 'JavaScript',
+                code: `%nm2%console%/%%spch%.%/%%nm%log%/%%p%(%/%%q%"%/%%str%Hello, world!%/%%q%"%/%%p%)%/%`,
+                identifier: 'js',
+                append: `<hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1024">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/W1NxKzomw6Oo">Code&nbsp;Playground</a> (<a href="https://code.sololearn.com/cOOCnA60SUZv">Node.js</a>) |
+            <a href="https://en.wikipedia.org/wiki/JavaScript">Wikipedia</a> |
+            <a href="https://www.ecma-international.org/publications-and-standards/standards/ecma-262/">ECMA-262 Specification</a>
+        </p>`
+            },
+            {
+                title: 'Kotlin',
+                code: `%kw1%fun%/% %nm%main%/%%p%() {%/%
+    %nm%println%/%%p%(%/%%q%"%/%%str%Hello, world!%/%%q%"%/%%p%)%/%
+%p%}%/%`,
+                identifier: 'kt',
+                append: `<hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1160">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/cfmUxv3hg9gS">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/Kotlin_(programming_language)">Wikipedia</a> |
+            <a href="https://kotlinlang.org/">Official Website</a>
+        </p>`
+            },
+            {
+                title: 'PHP',
+                code: `%kw1%&lt;?php%/% %nm%echo%/% %q%'%/%%str%Hello, world!%/%%q%'%/%%semi%;%/% %kw1%?&gt;%/%`,
+                identifier: 'php',
+                append: `<hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1059">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/wDslOX5ze0Yq">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/PHP">Wikipedia</a> |
+            <a href="https://www.php.net/">Official Website</a>
+        </p>`
+            },
+            {
+                title: 'Python',
+                code: `%nm%print%/%%p%(%/%%q%'%/%%str%Hello, world!%/%%q%'%/%%p%)%/%`,
+                identifier: 'py',
+                append: `<hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1073">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/cXna5DhruIbp">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Wikipedia</a> |
+            <a href="https://www.python.org/">Official Website</a>
+        </p>`
+            },
+            {
+                title: 'R',
+                code: `%nm2%print%/%%p%(%/%%q%"%/%%str%Hello, world!%/%%q%"%/%%p%)%/%`,
+                identifier: 'r',
+                append: `<hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1147">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/cgwtd7NaAh8m">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/R_(programming_language)">Wikipedia</a> |
+            <a href="https://www.r-project.org/">Official Website</a>
+        </p>`
+            },
+            {
+                title: 'Ruby',
+                code: `%nm%puts%/% %q%'%/%%str%Hello, world!%/%%q%'%/%`,
+                identifier: 'rb',
+                append: `<hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1081">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/cOGE028aGDYW">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/Ruby_(programming_language)">Wikipedia</a> |
+            <a href="https://www.ruby-lang.org/">Official Website</a>
+        </p>`
+            },
+            {
+                title: 'Swift',
+                code: `%nm%print%/%%p%(%/%%q%'%/%%str%Hello, world!%/%%q%'%/%%p%)%/%`,
+                identifier: 'swift',
+                append: `<hr><p>Links:
+            <a href="https://www.sololearn.com/learning/1075">Sololearn&nbsp;Course</a> |
+            <a href="https://code.sololearn.com/csF22cvgNXBS">Code&nbsp;Playground</a> |
+            <a href="https://en.wikipedia.org/wiki/Swift_(programming_language)">Wikipedia</a> |
+            <a href="https://www.swift.org/">Official Website</a>
+        </p>`
+            },
+        ]
+
+        function draw() {
+            $accGlobal.empty()
+            accItems.forEach(item => {
+                let $newItem = $(`<div class="accordion-item"></div>`)
+                let $newItemHeader = $(`<h3 id="acc-header-${item.identifier}" class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acc-item-${item.identifier}" aria-expanded="false" aria-controls="acc-item-${item.identifier}">${item.title}</button>
+        </h3>`)
+                let $newItemContentContainer = $(`<div id="acc-item-${item.identifier}" class="accordion-collapse collapse" aria-labelledby="acc-header-${item.identifier}" data-bs-parent="snippets-accordion"></div>`)
+                let $newItemContentBody = $(`<div class="accordion-body"></div>`)
+                let $newItemContent = $(`<code class="code-highlight cht-${theme}"></code>`)
+                let $newItemCode = $(parsecode(item.code))
+                let $newItemOtherEnd = $(parsecode(item.append))
+
+                $newItemHeader.appendTo($newItem)
+                $newItemCode.appendTo($newItemContent)
+                $newItemContent.appendTo($newItemContentBody)
+                $newItemOtherEnd.appendTo($newItemContentBody)
+                // $newItemCode.appendTo($newItemContentBody)
+                $newItemContentBody.appendTo($newItemContentContainer)
+                $newItemContentContainer.appendTo($newItem)
+
+                $newItem.appendTo($accGlobal)
+            });
+        }
+
+        function changeTheme(str) {
+            let $codes = $(`.cht-${theme}`)
+            $codes.removeClass(`cht-${theme}`)
+            $codes.addClass(`cht-${str}`)
+            theme = str
+        }
+
+        $(window).on('load', () => {
+            const $accordion = $('#snippets-accordion')
+            $accGlobal = $accordion
+            accItems = accordionItems
+            draw()
+
+            const $themesDropdown = $('#themes-dropdown-list')
+            themes.forEach(i => {
+                $(`<li>
+            <span onclick="changeTheme('${i}')" class="dropdown-item">${i}</span>
+        </li>`).appendTo($themesDropdown)
+            });
+
+            const $loading = $('.loading-container')
+            $loading.css('display', 'none')
+
+            let typedStrings = []
+            accordionItems.forEach(item => {
+                typedStrings.push('"Hello, World!" in ' + item.title)
+            });
+            typedStrings = typedStrings
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value)
+            const typed = new Typed('#typed-header', {
+                strings: typedStrings,
+                smartBackspace: true,
+                typeSpeed: 50,
+                backSpeed: 25,
+                backDelay: 700,
+                showCursor: true,
+                autoInsertCss: true,
+            })
+        })
+    </script>
+</body>
+
+</html>
